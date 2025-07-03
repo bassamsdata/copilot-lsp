@@ -31,6 +31,10 @@ return {
     root_dir = vim.uv.cwd(),
     on_init = function(client)
         local au = vim.api.nvim_create_augroup("copilotlsp.init", { clear = true })
+        local bufnr = vim.api.nvim_get_current_buf()
+        if not require("copilot-lsp.util").should_attach_to_buffer(bufnr) then
+            return
+        end
         --NOTE: Inline Completions
         --TODO: We dont currently use this code path, so comment for now until a UI is built
         -- vim.api.nvim_create_autocmd("TextChangedI", {

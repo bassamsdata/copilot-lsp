@@ -16,6 +16,7 @@ M.defaults = {
         clear_on_large_distance = true,
         count_horizontal_moves = true,
         reset_on_approaching = true,
+        buffer_blacklist = {},
     },
 }
 

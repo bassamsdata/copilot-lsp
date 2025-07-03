@@ -1,10 +1,34 @@
 local M = {}
+local config = require("copilot-lsp.config").config
+local api = vim.api
+
 ---@param edit copilotlsp.InlineEdit
 function M.apply_inline_edit(edit)
     local bufnr = vim.uri_to_bufnr(edit.textDocument.uri)
 
     ---@diagnostic disable-next-line: assign-type-mismatch
     vim.lsp.util.apply_text_edits({ edit }, bufnr, "utf-16")
+end
+
+--- Checks if Copilot should attach to a buffer
+---@param bufnr integer
+---@return boolean
+function M.should_attach_to_buffer(bufnr)
+    if
+        not vim.fn.getbufvar(bufnr, "&buflisted") == 1
+        or vim.bo[bufnr].buftype ~= ""
+        or not api.nvim_buf_is_valid(bufnr)
+        or not api.nvim_buf_is_loaded(bufnr)
+    then
+        return false
+    end
+    local name = api.nvim_buf_get_name(bufnr)
+    for _, b_name in ipairs(config.nes.buffer_blacklist or {}) do
+        if name:match(b_name) then
+            return false
+        end
+    end
+    return true
 end
 
 ---Debounces calls to a function, and ensures it only runs once per delay
