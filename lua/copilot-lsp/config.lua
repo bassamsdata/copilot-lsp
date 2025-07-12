@@ -4,6 +4,7 @@
 ---@field clear_on_large_distance boolean Whether to clear suggestion when cursor is far away
 ---@field count_horizontal_moves boolean Whether to count horizontal cursor movements
 ---@field reset_on_approaching boolean Whether to reset counter when approaching suggestion
+---@field buffer_blacklist string[] List of buffer names to ignore for suggestions
 
 local M = {}
 
